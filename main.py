@@ -14,7 +14,7 @@ def js_views(filepath):
 @bottle.route('/css/<filepath:path>')
 def css_views(filepath):
     return bottle.static_file(filepath,root='css/')
-    
+
 @bottle.route('/fonts/<filepath:path>')
 def fonts_views(filepath):
     return bottle.static_file(filepath,root='fonts/')
@@ -35,14 +35,14 @@ def query():
         return json.dumps({"success":False, "message":"arch error"})
     if data["arch"] not in ["x86", "x64"]:
         return json.dumps({"success":False, "message":"arch error"})
-    
+
     try:
         branch = data["branch"]
         arch = data["arch"]
         appid = {"Stable":"4DC8B4CA-1BDA-483E-B5FA-D3C12E15B62D", "Beta":"4DC8B4CA-1BDA-483E-B5FA-D3C12E15B62D", "Dev":"4DC8B4CA-1BDA-483E-B5FA-D3C12E15B62D", "Canary":"4EA16AC7-FD5A-47C3-875B-DBF4A2008C20"}
         ap = {"Stable":{"x86":"-multi-chrome", "x64":"x64-stable-multi-chrome"}, "Beta":{"x86":"1.1-beta", "x64":"x64-beta-multi-chrome"}, "Dev":{"x86":"2.0-dev", "x64":"x64-dev-multi-chrome"}, "Canary":{"x86":"", "x64":"x64-canary"}}
 
-        xml = "<?xml version='1.0' encoding='UTF-8'?><request protocol='3.0' ismachine='0'><os platform='win' version='6.3' arch='x64'/><app appid='{{{0}}}' ap='{1}'><updatecheck/></app></request>".format(appid[branch], ap[branch][arch])
+        xml = "<?xml version='1.0' encoding='UTF-8'?><request protocol='3.0' ismachine='0'><hw sse='1' sse2='1' sse3='1' ssse3='1' sse41='1' sse42='1' avx='1' physmemory='12582912' /><os platform='win' version='6.3' arch='x64'/><app appid='{{{0}}}' ap='{1}'><updatecheck/></app></request>".format(appid[branch], ap[branch][arch])
         r = requests.post('http://tools.google.com/service/update2', data=xml, timeout=2)
 
         root = tree.fromstring(r.text)
